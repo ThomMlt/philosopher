@@ -6,7 +6,7 @@
 /*   By: tmillot <tmillot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 17:29:49 by tmillot           #+#    #+#             */
-/*   Updated: 2025/02/18 17:35:15 by tmillot          ###   ########.fr       */
+/*   Updated: 2025/02/19 19:28:41 by tmillot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,5 @@
 
 int main(int ac, char **av)
 {
-	(void)ac;
-	printf("%d", ft_atoi_philo(av[1]));
+	ft_parse_arg(ac, av);
 }

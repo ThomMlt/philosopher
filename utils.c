@@ -6,7 +6,7 @@
 /*   By: tmillot <tmillot@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 16:42:28 by tmillot           #+#    #+#             */
-/*   Updated: 2025/02/18 17:35:14 by tmillot          ###   ########.fr       */
+/*   Updated: 2025/02/19 19:10:46 by tmillot          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,30 +22,27 @@ int	ft_strlen(char *str)
 	return (i);
 }
 
-int	ft_atoi_philo(char *nb)
+long	ft_atol(char *nb)
 {
-	long	res;
+	long	sign;
+	long	result;
 	int		i;
 
-	res = 0;
+	sign = 1;
+	result = 0;
 	i = 0;
-	if (ft_strlen(nb) <= 11)
+	while ((nb[i] >= 9 && nb[i] <= 13) || nb[i] == 32)
+		i++;
+	if (nb[i] == '+' || nb[i] == '-')
 	{
-		if (nb[i] == '+' || nb[i] == '-')
-		{
-			if (nb[i] == '-' && nb[i + 1] != '-')
-				return (printf("time must be postive"), exit(0), 0);
-			i++;
-		}
-		while (nb[i] >= '0' && nb[i] <= '9')
-		{
-			res = res * 10 + nb[i] - '0';
-			i++;
-		}
-		if (res > 2147483647)
-			return (printf("time must be contained in an int"), exit(0), 0);
-		return (res);
+		if (nb[i] == '-')
+			sign *= -1;
+		i++;
 	}
-	else
-		return (printf("time must be contained in an int"), exit(0), 0);
+	while (nb[i] >= '0' && nb[i] <= '9')
+	{
+		result = result * 10 + (nb[i] - '0');
+		i++;
+	}
+	return (sign * result);
 }
