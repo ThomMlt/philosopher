@@ -6,7 +6,7 @@
 /*   By: thomas <thomas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 16:35:10 by tmillot           #+#    #+#             */
-/*   Updated: 2025/02/22 11:30:28 by thomas           ###   ########.fr       */
+/*   Updated: 2025/02/22 17:35:22 by thomas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,19 +30,20 @@
 
 typedef struct s_param
 {
-	int		nb_philo;
-	int		time_die;
-	int		time_eat;
-	int		time_sleep;
-	int		time_think;
-	int		nb_meal;
+	int			nb_philo;
+	int			time_die;
+	int			time_eat;
+	int			time_sleep;
+	int			time_think;
+	long long	ms_time_start;
+	int			nb_meal;
 }	t_param;
 
 typedef struct s_philo
 {
 	int					id;
 	int					nb_meal;
-	pthread_t			process;
+	pthread_t			thread;
 	pthread_mutex_t		left_fork;
 	pthread_mutex_t		right_fork;
 }	t_philo;
@@ -68,5 +69,11 @@ int	init_struct_philo(t_data *data);
 
 /* Hangling return error */
 void exit_erreur(char *str);
+
+/* get time in millisecond*/
+long long	get_time_ms(void);
+
+/* Handling free */
+void	cleanup_free(t_data *data);
 
 #endif
