@@ -6,7 +6,7 @@
 /*   By: thomas <thomas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:04:03 by thomas            #+#    #+#             */
-/*   Updated: 2025/02/23 17:26:17 by thomas           ###   ########.fr       */
+/*   Updated: 2025/02/23 18:08:06 by thomas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ int	init_struct_philo(t_data *data)
 		data->philo[i]->id = 1 + i;
 		data->philo[i]->nb_meal = 0;
 		data->philo[i]->last_time_meal = get_time_ms();
-		data->philo[i]->left_fork = NULL;
 		pthread_mutex_init(&data->philo[i]->right_fork, NULL);
 		if (i == data->param->nb_philo - 1)
 			data->philo[i]->left_fork = &data->philo[0]->right_fork;
@@ -53,3 +52,4 @@ int	init_struct_philo(t_data *data)
 	}
 	return (SUCCESS);	
 }
+
