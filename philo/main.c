@@ -6,7 +6,7 @@
 /*   By: thomas <thomas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 17:29:49 by tmillot           #+#    #+#             */
-/*   Updated: 2025/02/22 16:43:57 by thomas           ###   ########.fr       */
+/*   Updated: 2025/02/23 14:08:52 by thomas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,9 @@ int main(int ac, char **av)
 	while (i < data.param->nb_philo)
 	{
 		printf("le philo[%d] a l'id : %d\n", i, data.philo[i]->id);
+		printf("last meal : %lld\n", data.philo[i]->last_time_meal);
 		i++;
 	}
+	create_thread(&data);
 	cleanup_free(&data);
 }

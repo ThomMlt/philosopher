@@ -6,7 +6,7 @@
 /*   By: thomas <thomas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 16:35:10 by tmillot           #+#    #+#             */
-/*   Updated: 2025/02/22 17:35:22 by thomas           ###   ########.fr       */
+/*   Updated: 2025/02/23 16:53:57 by thomas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,11 @@ typedef struct s_philo
 {
 	int					id;
 	int					nb_meal;
+	long long			last_time_meal;
 	pthread_t			thread;
-	pthread_mutex_t		left_fork;
 	pthread_mutex_t		right_fork;
+	pthread_mutex_t		*left_fork;
+	t_param				*param;
 }	t_philo;
 
 typedef struct s_data
@@ -75,5 +77,8 @@ long long	get_time_ms(void);
 
 /* Handling free */
 void	cleanup_free(t_data *data);
+
+/* pthread */
+void	create_thread(t_data *data);
 
 #endif

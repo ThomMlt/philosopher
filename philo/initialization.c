@@ -6,7 +6,7 @@
 /*   By: thomas <thomas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:04:03 by thomas            #+#    #+#             */
-/*   Updated: 2025/02/22 17:41:10 by thomas           ###   ########.fr       */
+/*   Updated: 2025/02/23 17:26:17 by thomas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,14 @@ int	init_struct_philo(t_data *data)
 		data->philo[i] = malloc(sizeof(t_philo));
 		data->philo[i]->id = 1 + i;
 		data->philo[i]->nb_meal = 0;
-		pthread_mutex_init(&data->philo[i]->left_fork, NULL);
-		if (i == 0)
-			data->philo[0]->left_fork = data->philo[data->param->nb_meal - 1]->right_fork;
+		data->philo[i]->last_time_meal = get_time_ms();
+		data->philo[i]->left_fork = NULL;
+		pthread_mutex_init(&data->philo[i]->right_fork, NULL);
+		if (i == data->param->nb_philo - 1)
+			data->philo[i]->left_fork = &data->philo[0]->right_fork;
 		else
-			data->philo[i]->left_fork = data->philo[i + 1]->right_fork;
+			data->philo[i]->left_fork = &data->philo[i + 1]->right_fork;
+		data->philo[i]->param = data->param;
 		i++;
 	}
 	return (SUCCESS);	
