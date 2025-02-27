@@ -6,7 +6,7 @@
 /*   By: thomas <thomas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 16:35:10 by tmillot           #+#    #+#             */
-/*   Updated: 2025/02/23 18:08:13 by thomas           ###   ########.fr       */
+/*   Updated: 2025/02/27 13:20:06 by thomas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,17 @@
 
 typedef struct s_param
 {
-	int			nb_philo;
-	int			time_die;
-	int			time_eat;
-	int			time_sleep;
-	int			time_think;
-	long long	ms_time_start;
-	int			nb_meal;
+	int					nb_philo;
+	int					time_die;
+	int					time_eat;
+	int					time_sleep;
+	int					time_think;
+	long long			ms_time_start;
+	int					nb_meal_to_finish;
+	int					nb_as_finish;
+	int					end_simulation;
+	int					someone_died;
+	pthread_mutex_t		mutex;
 }	t_param;
 
 typedef struct s_philo
@@ -55,6 +59,12 @@ typedef struct s_data
 	t_param				*param;
 	t_philo				**philo;
 }				t_data;
+
+typedef struct s_monitor
+{
+	t_data *data;
+}	t_monitor;
+
 
 
 /* basique utils */
@@ -80,5 +90,24 @@ void	cleanup_free(t_data *data);
 
 /* pthread */
 void	create_thread(t_data *data);
+
+/* Message */
+void	message_fork(t_philo *philo);
+void	message_eat(t_philo *philo);
+void	message_sleep(t_philo *philo);
+void	message_think(t_philo *philo);
+void	message_dead(t_philo *philo);
+
+/* Philo routine */
+void	*start_routine(void *arg);
+void	think_routine(t_philo *philo);
+void	sleep_routine(t_philo *philo);
+void	eat_routine(t_philo *philo);
+void	take_fork(t_philo *philo);
+
+/* monitor routine */
+void	*monitor_routine(void *arg);
+int check_if_simulation_ended(t_param *param);
+void set_simulation_ended(t_param *param);
 
 #endif

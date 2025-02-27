@@ -6,7 +6,7 @@
 /*   By: thomas <thomas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:04:03 by thomas            #+#    #+#             */
-/*   Updated: 2025/02/23 18:08:06 by thomas           ###   ########.fr       */
+/*   Updated: 2025/02/27 13:20:39 by thomas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,37 @@ int	init_struct_param(t_data *data, int ac, char **av)
 	data->param->time_sleep = ft_atol(av[4]);
 	data->param->time_think = 1;
 	data->param->ms_time_start = get_time_ms();
+	data->param->nb_as_finish = 0;
+	data->param->end_simulation = FALSE;
+	data->param->someone_died = FALSE;
+	pthread_mutex_init(&data->param->mutex, NULL);
 	if (ac == 6)
-		data->param->nb_meal = ft_atol(av[5]);
+		data->param->nb_meal_to_finish = ft_atol(av[5]);
+	else
+		data->param->nb_meal_to_finish = -1;
 	return (SUCCESS);
+}
+
+static void	init_tab_philo(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	i = 0;
+	while (i < data->param->nb_philo)
+	{
+		data->philo[i]->id = 1 + i;
+		data->philo[i]->nb_meal = 0;
+		data->philo[i]->last_time_meal = get_time_ms();
+		data->philo[i]->left_fork = NULL;
+		pthread_mutex_init(&data->philo[i]->right_fork, NULL);
+		if (i == (data->param->nb_philo - 1))
+			data->philo[i]->left_fork = &data->philo[0]->right_fork;
+		else
+			data->philo[i]->left_fork = &data->philo[i + 1]->right_fork;
+		data->philo[i]->param = data->param;
+		i++;
+	}
 }
 
 int	init_struct_philo(t_data *data)
@@ -33,23 +61,15 @@ int	init_struct_philo(t_data *data)
 	int	i;
 
 	i = 0;
-	data->philo = malloc(sizeof(t_philo) * (data->param->nb_philo));
+	data->philo = malloc(sizeof(t_philo) * (data->param->nb_philo + 1));
 	if (!data->philo)
 		return (FAIL);
+	data->philo[data->param->nb_philo] = NULL;
 	while (i < data->param->nb_philo)
 	{
 		data->philo[i] = malloc(sizeof(t_philo));
-		data->philo[i]->id = 1 + i;
-		data->philo[i]->nb_meal = 0;
-		data->philo[i]->last_time_meal = get_time_ms();
-		pthread_mutex_init(&data->philo[i]->right_fork, NULL);
-		if (i == data->param->nb_philo - 1)
-			data->philo[i]->left_fork = &data->philo[0]->right_fork;
-		else
-			data->philo[i]->left_fork = &data->philo[i + 1]->right_fork;
-		data->philo[i]->param = data->param;
 		i++;
 	}
+	init_tab_philo(data);
 	return (SUCCESS);	
 }
-
