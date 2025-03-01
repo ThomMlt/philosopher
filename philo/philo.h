@@ -6,7 +6,7 @@
 /*   By: thomas <thomas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 16:35:10 by tmillot           #+#    #+#             */
-/*   Updated: 2025/02/27 13:20:06 by thomas           ###   ########.fr       */
+/*   Updated: 2025/03/01 18:57:12 by thomas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,11 @@ typedef struct s_param
 	int					time_think;
 	long long			ms_time_start;
 	int					nb_meal_to_finish;
-	int					nb_as_finish;
+	int					finish_meal;
 	int					end_simulation;
-	int					someone_died;
-	pthread_mutex_t		mutex;
+	pthread_mutex_t		m_dead;
+	pthread_mutex_t		m_meal;
+	pthread_mutex_t		m_write;
 }	t_param;
 
 typedef struct s_philo
@@ -107,7 +108,6 @@ void	take_fork(t_philo *philo);
 
 /* monitor routine */
 void	*monitor_routine(void *arg);
-int check_if_simulation_ended(t_param *param);
-void set_simulation_ended(t_param *param);
+int	end_loop(t_philo *philo);
 
 #endif
