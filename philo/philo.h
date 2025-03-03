@@ -6,7 +6,7 @@
 /*   By: thomas <thomas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 16:35:10 by tmillot           #+#    #+#             */
-/*   Updated: 2025/03/01 18:57:12 by thomas           ###   ########.fr       */
+/*   Updated: 2025/03/03 18:12:54 by thomas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,13 +61,6 @@ typedef struct s_data
 	t_philo				**philo;
 }				t_data;
 
-typedef struct s_monitor
-{
-	t_data *data;
-}	t_monitor;
-
-
-
 /* basique utils */
 int	ft_strlen(char *str);
 long	ft_atol(char *nb);
@@ -104,10 +97,10 @@ void	*start_routine(void *arg);
 void	think_routine(t_philo *philo);
 void	sleep_routine(t_philo *philo);
 void	eat_routine(t_philo *philo);
-void	take_fork(t_philo *philo);
+
 
 /* monitor routine */
 void	*monitor_routine(void *arg);
-int	end_loop(t_philo *philo);
+int		end_loop(t_param *param);
 
 #endif
