@@ -6,67 +6,66 @@
 /*   By: thomas <thomas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 11:25:59 by thomas            #+#    #+#             */
-/*   Updated: 2025/03/03 18:44:01 by thomas           ###   ########.fr       */
+/*   Updated: 2025/03/04 13:48:48 by thomas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	philosopher_dead(t_philo *philo, int time_to_die)
+int	philosopher_dead(t_philo philo)
 {
-	pthread_mutex_lock(&philo->param->m_meal);
-	if (get_time_ms() - philo->last_time_meal >= time_to_die)
+	pthread_mutex_lock(&philo.param->m_meal);
+	if (get_time_ms() - philo.last_time_meal >= philo.param->time_die)
 	{
-		pthread_mutex_unlock(&philo->param->m_meal);
+		pthread_mutex_unlock(&philo.param->m_meal);
 		return (TRUE);
 	}
-	pthread_mutex_unlock(&philo->param->m_meal);
+	pthread_mutex_unlock(&philo.param->m_meal);
 	return (FALSE);
 }
 
-int		check_someone_dead(t_philo *philos)
+int		check_someone_dead(t_data *data)
 {
 	int	i;
 
 	i = 0;
-	pthread_mutex_lock(&philos[0].param->m_dead);
-	while (i < philos[0].param->nb_philo)
+	while (i < data->param->nb_philo)
 	{
-		if (philosopher_dead(&philos[i], philos[0].param->time_die) == TRUE)
+		if (philosopher_dead(*data->philo[i]) == TRUE)
 		{
-			message_dead(&philos[i]);
-			philos[0].param->end_simulation = TRUE;
-			pthread_mutex_unlock(&philos[0].param->m_dead);
+			pthread_mutex_lock(&data->param->m_dead);
+			printf("%lld philo : %d died\n", (get_time_ms() - data->philo[i]->param->ms_time_start), data->philo[i]->id);
+			data->param->end_simulation = TRUE;
+			pthread_mutex_unlock(&data->param->m_dead);
 			return (TRUE);
 		}
 		i++;
 	}
-	pthread_mutex_unlock(&philos[0].param->m_dead);
 	return (FALSE);
 }
 
-int	check_all_ate(t_philo *philos)
+int	check_all_ate(t_data *data)
 {
 	int	i;
 	int	finished_eating;
 
 	i = 0;
 	finished_eating = 0;
-	if (philos[0].param->nb_meal_to_finish == -1)
+	if (data->param->nb_meal_to_finish == -1)
 		return (FALSE);
-	while (i < philos[0].param->nb_philo)
+	while (i < data->param->nb_philo)
 	{
-		pthread_mutex_lock(&philos[i].param->m_meal);
-		if (philos[i].nb_meal >= philos[i].param->nb_meal_to_finish)
+		pthread_mutex_lock(&data->param->m_meal);
+		if (data->philo[i]->nb_meal >= data->param->nb_meal_to_finish)
 			finished_eating++;
-		pthread_mutex_unlock(&philos[i].param->m_meal);
+		pthread_mutex_unlock(&data->param->m_meal);
 		i++;
 	}
-	if (finished_eating == philos[0].param->nb_philo)
+	if (finished_eating == data->param->nb_philo)
 	{
-		pthread_mutex_lock(&philos[i].param->m_dead);
-		philos[0].param->end_simulation = TRUE;
-		pthread_mutex_unlock(&philos[i].param->m_dead);
+		pthread_mutex_lock(&data->param->m_dead);
+		data->param->end_simulation = TRUE;
+		pthread_mutex_unlock(&data->param->m_dead);
 		return (TRUE);
 	}
 	return (FALSE);
@@ -74,13 +73,13 @@ int	check_all_ate(t_philo *philos)
 
 void	*monitor_routine(void *arg)
 {
-	t_philo	*philo;
+	t_data	*data;
 
-	philo = (t_philo *)arg;
+	data = (t_data *)arg;
 	while (TRUE)
 	{
 		// printf("\n ici on regarde le resultat de someone_dead %d\n", check_someone_dead(philo));
-		if (check_someone_dead(philo) == TRUE || check_all_ate(philo) == TRUE)
+		if (check_someone_dead(data) == TRUE || check_all_ate(data) == TRUE)
 			break;
 	}
 	return (NULL);

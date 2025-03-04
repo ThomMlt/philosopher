@@ -6,7 +6,7 @@
 /*   By: thomas <thomas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 11:24:44 by thomas            #+#    #+#             */
-/*   Updated: 2025/03/03 14:31:59 by thomas           ###   ########.fr       */
+/*   Updated: 2025/03/04 13:43:58 by thomas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,5 @@ void	create_thread(t_data *data)
 			exit_erreur("Failed to join thread");
 		i++;
 	}
+	pthread_join(monitor, NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: thomas <thomas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 22:31:18 by thomas            #+#    #+#             */
-/*   Updated: 2025/03/03 18:39:38 by thomas           ###   ########.fr       */
+/*   Updated: 2025/03/04 18:38:23 by thomas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ void	eat_routine(t_philo *philo)
 	philo->nb_meal++;
 	pthread_mutex_unlock(&philo->param->m_meal);
 	ft_usleep(philo->param->time_eat);
-	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(&philo->right_fork);
+	pthread_mutex_unlock(philo->left_fork);
 }
 
 void	sleep_routine(t_philo *philo)
@@ -77,7 +77,6 @@ void	*start_routine(void *arg)
 		eat_routine(philo);
 		sleep_routine(philo);
 		think_routine(philo);
-		printf("resultat de end_loop apres un cycle d'un philo : %d\n", end_loop(philo->param));
 	}
 	return (NULL);
 }
